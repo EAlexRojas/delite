@@ -311,6 +311,18 @@ define([
 				}
 			} while ((node = node.parentNode));
 			return null;
+		},
+
+		changeTemplate : function (template) {
+			//Remove the nodes added by the old template
+			while (this.firstChild) {
+				this.removeChild(this.firstChild);
+			}
+			//Set new template and re-render
+			this.template = template;
+			this.render();
+			this.notifyCurrentValue.apply(this, this._templateHandle.dependencies);
+			this._templateHandle.attach();
 		}
 	});
 

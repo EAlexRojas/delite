@@ -177,6 +177,25 @@ define([
 		 */
 		getIndexOfChild: function (child) {
 			return this.getChildren().indexOf(child);
-		}
+		},
+
+		changeTemplate : dcl.advise({
+			before: function () {
+				//Get back the original markup from the containerNode
+				var contDom = this._contDom =  this.ownerDocument.createDocumentFragment();
+				while (this.containerNode.firstChild) {
+					contDom.appendChild(this.containerNode.firstChild);
+				}
+				this.containerNode = this;
+				//This is just needed to be able to use the real appendChild method during rendering
+				this.created = false;
+			},
+
+			after: function () {
+				this.created = true;
+				//Add the original markup to the new containerNode
+				this.appendChild(this._contDom);
+			}
+		})
 	});
 });
